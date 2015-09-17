@@ -75,6 +75,12 @@ class Router {
     }
 
     protected function exists($route) {
+//        dd($route);
+//        dd(self::$ROUTS);
+        if (self::$ROUTS[$route]) {
+            return $route;
+        }
+
         foreach (self::$ROUTS as $routePath => $routeValue) {
             if (strstr($route, $routePath)) {
                 return $routePath;
