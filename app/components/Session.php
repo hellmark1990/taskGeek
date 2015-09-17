@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mark
- * Date: 14.09.15
- * Time: 21:02
- */
 
 namespace app\components;
 
@@ -39,10 +33,6 @@ class Session {
 
     public function getItem($item) {
         return $_SESSION[$item] ? $_SESSION[$item] : null;
-    }
-
-    public function isLoggedIn() {
-        return $this->getItem('userId') ? TRUE : FALSE;
     }
 
     public function destroySession() {

@@ -13,19 +13,28 @@
 <div id="header">
     <div id="logo">
         <a href="/">
-          <img src="/public/assets/images/logo.png">
+            <img src="/public/assets/images/logo.png">
         </a>
     </div>
 
     <ul id="top-menu">
-        <?php if (!App::create()->session->isLoggedIn()) { ?>
-            <li><a href="/register">Register</a></li>
-            <li><a href="/login">Login</a></li>
-        <?php } else { ?>
-            <li><a href="/logout">Logout</a></li>
-            <li><a href="/profile">Profile</a></li>
-        <?php } ?>
+        <li>
+            <a href="/index/show">Show numbers from session</a>
+        </li>
+        <li>
+            <a href="/index/load">Load numbers from DB to session</a>
+        </li>
+        <li>
+            <a href="/index/save">Save numbers to DB</a>
+        </li>
     </ul>
+    <div id="add-number-form-container">
+        <h4>Add number to session</h4>
+        <form method="post" action="/index/add">
+            <input type="number" value="0" name="number">
+            <button type="submit">Add</button>
+        </form>
+    </div>
 </div>
 
 

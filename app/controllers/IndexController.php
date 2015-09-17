@@ -3,10 +3,20 @@
 namespace app\controllers;
 
 use app\components\App;
-use app\models\SessionModel;
-
+use app\classes\SessionNumbersManager;
 
 class IndexController extends Controller {
+
+    /**
+     * @var SessionNumbersManager
+     */
+    protected $sessionNumbersManager;
+
+    public function __construct() {
+        parent::_construct();
+
+        $this->sessionNumbersManager = new SessionNumbersManager();
+    }
 
     public function index() {
         App::create()->template
@@ -17,13 +27,10 @@ class IndexController extends Controller {
     }
 
     public function add($number = 0) {
-        $numbersInSession = App::create()->session->getItem('numbers');
-        $numbersInSession = $numbersInSession ? $numbersInSession : [];
-        $numbersInSession[] = $number;
+        $number = App::create()->request->post('number') ? (int)App::create()->request->post('number') : $number;
+        $this->sessionNumbersManager->setNumber($number);
 
-        App::create()->session->setData(['numbers' => $numbersInSession]);
-
-        $numbersInSession = var_export($numbersInSession, true);
+        $numbersInSession = $this->sessionNumbersManager->getNumbersReadable();
         App::create()->template
             ->setData([
                 'title' => "Number: '$number' has been successfully recorded into session.",
@@ -33,9 +40,7 @@ class IndexController extends Controller {
     }
 
     public function show() {
-        $numbersInSession = App::create()->session->getItem('numbers');
-        $numbersInSession = $numbersInSession ? $numbersInSession : [];
-        $numbersInSession = var_export($numbersInSession, true);
+        $numbersInSession = $this->sessionNumbersManager->getNumbersReadable();
 
         App::create()->template
             ->setData([
@@ -46,12 +51,9 @@ class IndexController extends Controller {
     }
 
     public function save() {
-        $numbersInSession = App::create()->session->getItem('numbers');
-        $sessionModel = (new SessionModel())
-            ->setNumbers($numbersInSession)
-            ->save();
+        $this->sessionNumbersManager->saveToDB();
 
-        $numbersInSession = var_export($sessionModel->getNumbers(), true);
+        $numbersInSession = $this->sessionNumbersManager->getNumbersReadable();
         App::create()->template
             ->setData([
                 'title' => 'Session data was successfully saved.',
@@ -61,11 +63,15 @@ class IndexController extends Controller {
     }
 
     public function load() {
+        $this->sessionNumbersManager->loadFromDB();
+
+        $numbersInSession = $this->sessionNumbersManager->getNumbersReadable();
         App::create()->template
             ->setData([
                 'title' => 'Home Page',
+                'numbersInSession' => $numbersInSession,
             ])
-            ->render('home/index');
+            ->render('index/load');
     }
 
 

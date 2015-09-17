@@ -35,13 +35,20 @@ class SessionModel extends Model {
         return 1;
     }
 
-    public function setNumbers(array $numbers) {
-        $this->numbers = $numbers ? serialize($numbers) : null;
+    public function setId($id) {
+    }
+
+    public function setNumbers($numbers) {
+        if (@unserialize($numbers) !== false) {
+            $this->numbers = $numbers;
+        } else {
+            $this->numbers = is_array($numbers) && count($numbers) > 0 ? serialize($numbers) : null;
+        }
         return $this;
     }
 
     public function getNumbers() {
-        return unserialize($this->numbers);
+        return @unserialize($this->numbers) ? @unserialize($this->numbers) : [];
     }
 
     public function getTableName() {
