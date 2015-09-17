@@ -23,7 +23,7 @@ class IndexController extends Controller {
             ->setData([
                 'title' => 'Home Page',
             ])
-            ->render('home/index');
+            ->render('index/home');
     }
 
     public function add($number = 0) {

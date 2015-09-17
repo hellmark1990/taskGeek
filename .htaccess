@@ -3,6 +3,8 @@ AddDefaultCharset UTF-8
 Options +FollowSymLinks
 Options -Indexes
 
+DirectoryIndex start.php
+
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
